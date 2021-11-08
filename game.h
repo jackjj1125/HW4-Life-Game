@@ -1,10 +1,22 @@
 #ifndef GAME_H
 #define GAME_H
+#include <QMainWindow>
+#include <QColor>
+#include <QGraphicsScene>
+#include <QObject>
+#include <QGraphicsView>
+#include <QGraphicsItem>
 
 #include <QColor>
 #include <QGraphicsItem>
 
-class game : public QObject, public QGraphicsItem {
+class Game : public QObject, public QGraphicsItem {
+
+    Q_OBJECT
+
+
+class game: public QObject, public QGraphicsItem
+{
 
     Q_OBJECT
 
@@ -32,20 +44,21 @@ public:
     void set_nextStatus(bool next_turn_) {next_turn = next_turn_;}; //sets status for next turn
 
     QColor get_color() {return color_;}; //getter for color of cell
-    void set_Color(int r, int g, int b); //setter for color of cell(handles color logic)
+   // void set_Color(int r, int g, int b); //setter for color of cell(handles color logic)
 
-    void increase();
-    void decrease();
-    void neighbors(int x, int y);
 
-protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 
 
     signals:
+        void increase();
+        void decrease();
+        void neighbors(int x, int y);
+
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
 
 private:
-
     int x_;
     int y_;
     int width_;
