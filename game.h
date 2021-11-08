@@ -7,7 +7,12 @@
 #include <QGraphicsView>
 #include <QGraphicsItem>
 
+#include <QColor>
+#include <QGraphicsItem>
 
+class Game : public QObject, public QGraphicsItem {
+
+    Q_OBJECT
 
 
 class game: public QObject, public QGraphicsItem
@@ -42,10 +47,12 @@ public:
    // void set_Color(int r, int g, int b); //setter for color of cell(handles color logic)
 
 
-signals:
-    void increase();
-    void decrease();
-    void neighbors(int x, int y);
+
+
+    signals:
+        void increase();
+        void decrease();
+        void neighbors(int x, int y);
 
 
 protected:
