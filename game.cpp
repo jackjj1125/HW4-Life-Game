@@ -3,6 +3,7 @@
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QtWidgets>
+#include "game.h"
 
 
 
@@ -30,14 +31,14 @@ game::game(int x, int y, int width, int height) //constructor
 
 QRectF game::boundingRect() const
 {
-    //return QRectF(x_, y_. width_, width);
+    return QRectF(x_, y_, width_, width_);
 
 }
 
 QPainterPath game::shape() const
 {
     QPainterPath path;
-   // path.addRect(x_, y_, width_, width);
+    path.addRect(x_, y_, width_, width_);
     return path;
 
 }
@@ -60,7 +61,8 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if(this->get_color() == QColor(120, 20, 140))
         {
             qDebug() << "Dead Cell";
-            this->set_Color(255, 255, 255);
+           // this->set_Color(255, 255, 255);
+            emit decrease();
         }
     }
     else if(event->button() == Qt::LeftButton)
@@ -68,7 +70,8 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
         if(this->get_color() == QColor(255,255,255))
         {
              qDebug() << "Cell is now alive";
-             this->set_Color(120,20,140);
+           //  this->set_Color(120,20,140);
+             emit increase();
         }
     }
                 update();
