@@ -3,9 +3,11 @@
 #include <QMainWindow>
 #include <QColor>
 #include <QGraphicsScene>
+#include <QObject>
 #include <QGraphicsView>
 #include <QGraphicsItem>
-#include <mainwindow.h>
+
+
 
 
 class game: public QObject, public QGraphicsItem
@@ -37,8 +39,10 @@ public:
     void set_nextStatus(bool next_turn_) {next_turn = next_turn_;}; //sets status for next turn
 
     QColor get_color() {return color_;}; //getter for color of cell
-    void set_Color(int r, int g, int b); //setter for color of cell(handles color logic)
+   // void set_Color(int r, int g, int b); //setter for color of cell(handles color logic)
 
+
+signals:
     void increase();
     void decrease();
     void neighbors(int x, int y);
