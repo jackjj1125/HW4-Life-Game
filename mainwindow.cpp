@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     QColor color(255,0,0);
 
     MakeBoard_ = new QGraphicsScene;
-    QGraphicsView * grid_view = ui->MainPlot;
+    QGraphicsView * grid_view = ui->gameGraphicsView;
     grid_view->setScene(MakeBoard_);
     grid_view->setSceneRect(0,0,grid_view->frameSize().width(),grid_view->frameSize().height());
 
@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
             game * item = new game(j,i,cell_width_/20, cell_height_/10);
             cells[i][j] = item;
             MakeBoard_->addItem(item);
-            connect(item, &game::increase, this, &MainWindow::receive_inc);
-            connect(item, &game::decrease, this, &MainWindow::receive_dec);
+           // connect(item, &game::increase, this, &MainWindow::receive_inc);
+           // connect(item, &game::decrease, this, &MainWindow::receive_dec);
 
             if(item->get_color() == QColor(240,20,120))
             {
@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
     ui->label->setText(QString("Turn#: ")+QString::number(turnCounter_));
-    ui->label2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%" ));
+    ui->label_2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%" ));
 
 
 //    MakePopGraph_ = new QGraphicsScene;
@@ -56,6 +56,12 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::PopulationCounter(int pop)
+{
+    population_ += pop;
+    ui->label_2->setText(QString("Population: ")+QString::number(population_)+QString(" ") +QString::number((population_ * 100)/200)+QString("%"));
+
+}
 
 void MainWindow::turnCount() //handles number of turns
 {
