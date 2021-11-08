@@ -4,11 +4,12 @@
 #include <QMainWindow>
 #include "game.h"
 #include <QGraphicsScene>
+#include <QGraphicsView>
+#include <vector>
 
 
-QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+
 
 class MainWindow : public QMainWindow
 {
@@ -17,35 +18,37 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void turnCount();
-    int NeighborCount();
-    bool is_alive();
 
-public slots:
-    void receive_inc();
-    void receive_dec();
+    void turnCount(); //handles turns
+    void checkAlive(); //checks if cells should be alive or dead
+    int NeighborCount(); //checks neighbors
+    bool is_alive(); //checks if a given cell is alive
+    void PopulationCounter(int pop);
+    void receive_inc(); //
+    void receive_dec(); //
     void neighborSlot(int x, int y);
 
-private slots:
-    void on_restartButton_click();
-    void on_playButton_click();
-    void on_pauseButton_click();
-    void on_slider(int value);
-    void on_stepButton_click();
+    int population_;
+
+
+private slots: //buttons
+
+    void on_restartButton_click(); //slot for restart game button
+    void on_playButton_click(); //slot for play game button
+    void on_pauseButton_click(); //slot for pause game button
+    void on_slider(int value); //slot for slider button
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *BuildGrid_;
-    QGraphicsScene *BuildGraph_;
+    QGraphicsScene *scene;
+
+    QGraphicsScene *MakeBoard_;
+    QGraphicsScene *MakePopGraph_;
+
     int cell_height_;
-    int cell_wdith_;
-    int bar_height_;
-    int bar_width_;
-    int turnCount_;
-    int y_bar;
-    double h_bar;
-    double speed_ = 1.0;
-    Game * cells[10][20];
-    std::vector <Bar*> bars_;
+    int cell_width_;
+    int turnCounter_ = 0;
+    QTimer *timer;
+    game *cells[10][20];
 };
 #endif // MAINWINDOW_H
