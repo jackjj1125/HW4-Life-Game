@@ -2,9 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "game.h"
 #include <QGraphicsScene>
+#include <QGraphicsView>
 
+#include <QMainWindow>
+
+#include <game.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,17 +38,22 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *BuildGrid_;
-    QGraphicsScene *BuildGraph_;
+
+    QGraphicsScene *scene;
+
+    QTimer *timer;
+
     int cell_height_;
-    int cell_wdith_;
+    int cell_width_;
     int bar_height_;
     int bar_width_;
     int turnCount_;
     int y_bar;
     double h_bar;
     double speed_ = 1.0;
-    Game * cells[10][20];
-    std::vector <Bar*> bars_;
+    game * cells[10][20];
+    //std::vector <Bar*> bars_;
+
+
 };
 #endif // MAINWINDOW_H
