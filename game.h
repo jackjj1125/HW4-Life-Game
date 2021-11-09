@@ -15,6 +15,12 @@ class game: public QObject, public QGraphicsItem
 
     Q_OBJECT
 
+
+class game: public QObject, public QGraphicsItem
+{
+
+    Q_OBJECT
+
 public:
     game(int x, int y, int width, int height); //constructor
 

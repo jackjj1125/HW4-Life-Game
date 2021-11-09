@@ -4,7 +4,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "game.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -105,3 +107,4 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
 //{
     //checkAlive();
 //}
+
