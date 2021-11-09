@@ -20,18 +20,18 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_Game_t {
+struct qt_meta_stringdata_game_t {
     QByteArrayData data[7];
     char stringdata0[38];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_Game_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_game_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_Game_t qt_meta_stringdata_Game = {
+static const qt_meta_stringdata_game_t qt_meta_stringdata_game = {
     {
-QT_MOC_LITERAL(0, 0, 4), // "Game"
+QT_MOC_LITERAL(0, 0, 4), // "game"
 QT_MOC_LITERAL(1, 5, 8), // "increase"
 QT_MOC_LITERAL(2, 14, 0), // ""
 QT_MOC_LITERAL(3, 15, 8), // "decrease"
@@ -40,12 +40,12 @@ QT_MOC_LITERAL(5, 34, 1), // "x"
 QT_MOC_LITERAL(6, 36, 1) // "y"
 
     },
-    "Game\0increase\0\0decrease\0neighbors\0x\0"
+    "game\0increase\0\0decrease\0neighbors\0x\0"
     "y"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_Game[] = {
+static const uint qt_meta_data_game[] = {
 
  // content:
        8,       // revision
@@ -71,10 +71,10 @@ static const uint qt_meta_data_Game[] = {
        0        // eod
 };
 
-void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<Game *>(_o);
+        auto *_t = static_cast<game *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->increase(); break;
@@ -85,22 +85,22 @@ void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (Game::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Game::increase)) {
+            using _t = void (game::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&game::increase)) {
                 *result = 0;
                 return;
             }
         }
         {
-            using _t = void (Game::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Game::decrease)) {
+            using _t = void (game::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&game::decrease)) {
                 *result = 1;
                 return;
             }
         }
         {
-            using _t = void (Game::*)(int , int );
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Game::neighbors)) {
+            using _t = void (game::*)(int , int );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&game::neighbors)) {
                 *result = 2;
                 return;
             }
@@ -108,32 +108,32 @@ void Game::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void *
     }
 }
 
-QT_INIT_METAOBJECT const QMetaObject Game::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject game::staticMetaObject = { {
     &QObject::staticMetaObject,
-    qt_meta_stringdata_Game.data,
-    qt_meta_data_Game,
+    qt_meta_stringdata_game.data,
+    qt_meta_data_game,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *Game::metaObject() const
+const QMetaObject *game::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *Game::qt_metacast(const char *_clname)
+void *game::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_Game.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_game.stringdata0))
         return static_cast<void*>(this);
     if (!strcmp(_clname, "QGraphicsItem"))
         return static_cast< QGraphicsItem*>(this);
     return QObject::qt_metacast(_clname);
 }
 
-int Game::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int game::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
@@ -151,19 +151,19 @@ int Game::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Game::increase()
+void game::increase()
 {
     QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 
 // SIGNAL 1
-void Game::decrease()
+void game::decrease()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }
 
 // SIGNAL 2
-void Game::neighbors(int _t1, int _t2)
+void game::neighbors(int _t1, int _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
