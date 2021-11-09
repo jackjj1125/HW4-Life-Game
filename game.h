@@ -10,7 +10,8 @@
 #include <QColor>
 #include <QGraphicsItem>
 
-class Game : public QObject, public QGraphicsItem {
+class game: public QObject, public QGraphicsItem
+{
 
     Q_OBJECT
 
