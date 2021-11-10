@@ -29,13 +29,22 @@ public:
 
     int population_;
 
+    void initTimer();
+    void changeInterval(int t);
+
 
 private slots: //buttons
 
- //   void on_restartButton_click(); //slot for restart game button
-   // void on_playButton_click(); //slot for play game button
-    //void on_pauseButton_click(); //slot for pause game button
-    //void on_slider(int value); //slot for slider button
+//    void on_restartButton_click(); //slot for restart game button
+
+
+    void on_playButton_click(); //slot for play game button
+    void on_pauseButton_click(); //slot for pause game button
+    void on_stepButton_click();
+
+
+    void speedSliderMoved(int position);
+
 
 private:
     Ui::MainWindow *ui;
@@ -49,5 +58,7 @@ private:
     int turnCounter_ = 0;
     QTimer *timer;
     game * cells[10][20];
+
+    bool start_;
 };
 #endif // MAINWINDOW_H

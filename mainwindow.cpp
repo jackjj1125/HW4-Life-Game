@@ -1,6 +1,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QTimer>
+#include <QtWidgets>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -11,6 +12,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // set up timer and set start flag to false
+    initTimer();
+    start_ = false;
 
     turnCounter_ = 0;
     QColor color(255,0,0);
@@ -51,11 +56,30 @@ MainWindow::MainWindow(QWidget *parent)
 //    graph_view->setScene(MakePopGraph_);
 //    graph_view->setSceneRect(0,0,graph_view->frameSize().width(), graph_view->frameSize().height());
 
+    connect(ui->playButton, &QAbstractButton::pressed, this, &MainWindow::on_playButton_click);
+    connect(ui->pauseButton, &QAbstractButton::pressed, this, &MainWindow::on_pauseButton_click);
+    connect(ui->stepButton, &QAbstractButton::pressed, this, &MainWindow::on_stepButton_click);
+    connect(ui->speedSlider, &QAbstractSlider::sliderMoved, this, &MainWindow::speedSliderMoved);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initTimer(){
+    timer = new QTimer(this);
+    timer->setInterval(1000);
+    connect(timer, SIGNAL(timeout()), this, SLOT(on_stepButton_click()));
+}
+
+void MainWindow::changeInterval(int t){
+    if(t < 2){
+        return;
+    }
+
+    timer->setInterval(1000 / t);
 }
 
 void MainWindow::PopulationCounter(int pop)
@@ -68,12 +92,12 @@ void MainWindow::PopulationCounter(int pop)
 void MainWindow::turnCount() //handles number of turns
 {
     turnCounter_++; //increment turn counter
-   // ui->label->setText(QString("Turn#: ")+QString::number(turnCounter_)); //print number turn
+    ui->label->setText(QString("Turn#: ")+QString::number(turnCounter_)); //print number turn
 }
 
 void MainWindow::checkAlive() //determine if cells should be dead or alive
 {
-
+    qDebug() << "checking if cells are dead or alive";
 }
 
 
@@ -90,18 +114,38 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
 
 //}
 
+//button for starting game
+void MainWindow::on_playButton_click(){
+    qDebug() << "Play button clicked!";
 
-//void MainWindow::on_playButton_click() //button for starting game
-//{
+    if(!start_){
+        timer->start();
+        start_ = true;
+    }
+}
 
-//}
 
-//void MainWindow::on_pauseButton_click()
-//{
-//    timer->stop();
-//}
+void MainWindow::on_pauseButton_click(){
+    qDebug() << "Pause button clicked!";
+    if(start_){
+        timer->stop();
+        start_ = false;
+    }
+}
 
-//void MainWindow::on_stepButton_click()
-//{
-    //checkAlive();
-//}
+void MainWindow::on_stepButton_click(){
+    //qDebug() << "Step button clicked!";
+    checkAlive();
+    turnCount();
+}
+
+void MainWindow::speedSliderMoved(int position){
+    if(position < 2){
+        ui->speedLabel->setText(QString("Speed: 1 sec"));
+    }
+    else{
+        changeInterval(position);
+        ui->speedLabel->setText(QString("Speed: ")+QString::number(1000 / position)+QString(" ms"));
+    }
+}
+

@@ -53,6 +53,7 @@ void game::paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidge
 
 void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
+
     if(event->button() == Qt::RightButton)
     {
         if(this->get_color() == QColor(120, 20, 140))
@@ -71,7 +72,7 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
              emit increase();
         }
     }
-                update();
+    update();
 
 
 
