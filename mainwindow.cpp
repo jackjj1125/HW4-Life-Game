@@ -5,7 +5,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "game.h"
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -148,4 +150,3 @@ void MainWindow::speedSliderMoved(int position){
         ui->speedLabel->setText(QString("Speed: ")+QString::number(1000 / position)+QString(" ms"));
     }
 }
-
