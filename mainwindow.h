@@ -21,9 +21,11 @@ public:
 
     void turnCount(); //handles turns
     void checkAlive(); //checks if cells should be alive or dead
-    int NeighborCount(); //checks neighbors
+    int checkNeighbors(std::vector<game*> neighbors); //checks neighbors
+    std::vector<game*> getNeighbors(int i, int j);
     bool is_alive(); //checks if a given cell is alive
-    void PopulationCounter(int pop);
+    void increasePopulation();
+    void decreasePopulation();
    // void receive_inc(); //
    // void receive_dec(); //
     void neighborSlot(int x, int y);
@@ -43,6 +45,8 @@ private slots: //buttons
     void on_pauseButton_click(); //slot for pause game button
     void on_stepButton_click();
 
+    void clickCellSlot(game * cell);
+
 
     void speedSliderMoved(int position);
 
@@ -58,6 +62,7 @@ private:
     int cell_width_;
     int turnCounter_ = 0;
     QTimer *timer;
+
     game * cells[10][20];
 
     bool start_;

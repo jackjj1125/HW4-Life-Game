@@ -27,6 +27,29 @@ game::game(int x, int y, int width, int height) //constructor
 
 }
 
+void game::kill(){
+    if(!is_alive){
+        return;
+    }
+    is_alive = false;
+    QColor newColorD(255, 255, 255);
+    color_ = newColorD;
+
+    emit killCell(this);
+    update();
+}
+void game::revive(){
+    if(is_alive){
+        return;
+    }
+    is_alive = true;
+    QColor newColorA(120,20,140);
+    color_ = newColorA;
+
+    emit reviveCell(this);
+    update();
+}
+
 
 QRectF game::boundingRect() const
 {
@@ -57,23 +80,38 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::RightButton)
     {
-        if(this->get_color() == QColor(120, 20, 140))
+        if(!this->get_status())
         {
             qDebug() << "Dead Cell";
-           // this->set_Color(255, 255, 255);
-            emit decrease();
+
+        }
+        else{
+            qDebug() << "You killed this cell";
+            this->set_status(false);
+            QColor newColorD(255, 255, 255);
+            color_ = newColorD;
+
+
+            emit killCell(this);
         }
     }
     else if(event->button() == Qt::LeftButton)
     {
-        if(this->get_color() == QColor(255,255,255))
+        if(!this->get_status())
         {
-             qDebug() << "Cell is now alive";
-           //  this->set_Color(120,20,140);
-             emit increase();
+            qDebug() << "Cell has been revived";
+            QColor newColorA(120,20,140);
+            color_ = newColorA;
+            this->set_status(true);
+
+
+            emit reviveCell(this);
+        }
+        else{
+            qDebug() << "Cell is alive";
         }
     }
-                update();
+    update();
 }
 
 
