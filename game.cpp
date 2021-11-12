@@ -7,7 +7,7 @@
 
 game::game(int x, int y, int width, int height) //constructor
 {
-    QColor color(125, 0, 0);
+    QColor color(0, 0, 0);
 
     // randomly sets status and respective color upon loading up game
     if(rand() % 100 < 50){ // make cell alive
@@ -24,7 +24,6 @@ game::game(int x, int y, int width, int height) //constructor
     y_ = y * height;
     width_ = width;
     height_ = height;
-
 }
 
 // this is called when a cell is dies upon a step or turn of the game
@@ -108,13 +107,12 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();  // update UI
 }
 
-Bar::Bar(const int x, const int y, int h) //constructor
+Bar::Bar(const int x, const int y, int h, QColor color) //constructor
 {
     x_ = x;
     y_ = y;
     height_ = -h;
-    color = "white";
-    color.setRgb(0,150,0); //setting color for bars to green
+    color_ = color;
 }
 
 QRectF Bar::boundingRect() const
@@ -129,12 +127,16 @@ QPainterPath Bar::shape() const
     return path;
 }
 
+void Bar::setBarColor(QColor color){
+    color_ = color;
+}
+
 void Bar::paint(QPainter *painter, const QStyleOptionGraphicsItem * item, QWidget *widget)
 {
-        Q_UNUSED(widget);
+    Q_UNUSED(widget);
 
     QBrush b = painter->brush();
-    painter->setBrush(QBrush(color));
+    painter->setBrush(QBrush(color_));
     painter->drawRect(this->x_, this->y_, this->width_, this->height_); //making rect
     painter->setBrush(b);
 }
