@@ -35,7 +35,7 @@ public:
     QPushButton *pauseButton;
     QWidget *verticalLayoutWidget;
     QVBoxLayout *verticalLayout;
-    QSlider *horizontalSlider;
+    QSlider *speedSlider;
     QLabel *speedLabel;
     QWidget *verticalLayoutWidget_2;
     QVBoxLayout *verticalLayout_2;
@@ -43,6 +43,8 @@ public:
     QLabel *label_2;
     QGraphicsView *gameGraphicsView;
     QGraphicsView *graphGraphicsView;
+    QPushButton *restartButton;
+    QLabel *label_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -76,15 +78,15 @@ public:
 
         verticalLayoutWidget = new QWidget(centralwidget);
         verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(280, 490, 491, 51));
+        verticalLayoutWidget->setGeometry(QRect(280, 490, 491, 52));
         verticalLayout = new QVBoxLayout(verticalLayoutWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        horizontalSlider = new QSlider(verticalLayoutWidget);
-        horizontalSlider->setObjectName(QString::fromUtf8("horizontalSlider"));
-        horizontalSlider->setOrientation(Qt::Horizontal);
+        speedSlider = new QSlider(verticalLayoutWidget);
+        speedSlider->setObjectName(QString::fromUtf8("speedSlider"));
+        speedSlider->setOrientation(Qt::Horizontal);
 
-        verticalLayout->addWidget(horizontalSlider);
+        verticalLayout->addWidget(speedSlider);
 
         speedLabel = new QLabel(verticalLayoutWidget);
         speedLabel->setObjectName(QString::fromUtf8("speedLabel"));
@@ -93,7 +95,7 @@ public:
 
         verticalLayoutWidget_2 = new QWidget(centralwidget);
         verticalLayoutWidget_2->setObjectName(QString::fromUtf8("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(10, 9, 181, 41));
+        verticalLayoutWidget_2->setGeometry(QRect(10, 9, 181, 42));
         verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -109,10 +111,16 @@ public:
 
         gameGraphicsView = new QGraphicsView(centralwidget);
         gameGraphicsView->setObjectName(QString::fromUtf8("gameGraphicsView"));
-        gameGraphicsView->setGeometry(QRect(100, 60, 600, 300));
+        gameGraphicsView->setGeometry(QRect(100, 70, 600, 300));
         graphGraphicsView = new QGraphicsView(centralwidget);
         graphGraphicsView->setObjectName(QString::fromUtf8("graphGraphicsView"));
-        graphGraphicsView->setGeometry(QRect(100, 370, 600, 100));
+        graphGraphicsView->setGeometry(QRect(100, 380, 600, 100));
+        restartButton = new QPushButton(centralwidget);
+        restartButton->setObjectName(QString::fromUtf8("restartButton"));
+        restartButton->setGeometry(QRect(650, 20, 113, 32));
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(320, 40, 151, 20));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -136,6 +144,8 @@ public:
         speedLabel->setText(QApplication::translate("MainWindow", "Speed:", nullptr));
         label->setText(QApplication::translate("MainWindow", "Turn:", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "Population:", nullptr));
+        restartButton->setText(QApplication::translate("MainWindow", "Restart Game", nullptr));
+        label_3->setText(QApplication::translate("MainWindow", "Conway's Game of Life", nullptr));
     } // retranslateUi
 
 };

@@ -18,6 +18,7 @@ class game: public QObject, public QGraphicsItem
 public:
     game(int x, int y, int width, int height); //constructor
 
+
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
 
@@ -41,12 +42,13 @@ public:
     QColor get_color() { return color_; }; //getter for color of cell
     void set_Color(QColor color) { color_ = color; }; //setter for color of cell(handles color logic)
 
+    // methods to kill or revive cells called every step of the game
     void kill();
     void revive();
 
 
 
-
+    // signals for preforming game logic
     signals:
         void reviveCell(game * cell);
         void killCell(game * cell);
@@ -54,9 +56,11 @@ public:
 
 
 protected:
+        // overridden mousePressEvent to handle user interaction with cells
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
 
 private:
+    // cell fields
     int x_;
     int y_;
     int width_;
@@ -64,31 +68,36 @@ private:
     bool is_alive;
     int next_turn;
     QColor color_;
-
-
-
 };
 
+
+// bar graph to track population
 class Bar: public QObject, public QGraphicsItem //bar class
 {
     Q_OBJECT;
 
 public:
-    Bar(int x, int y, int h); //constructor
+    Bar(int x, int y, int h,  QColor color); //constructor
+
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
 
     static int get_width() {return width_; }; //getter for width
+    double getHeight() { return height_; };
+
     int get_x() {return x_; }; //getter for x
     void set_x(int s) {x_ = x_ + s; }; //setter for x
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
+
+    void setBarColor(QColor color);
 
 private:
     int x_;
     int y_;
     static const int width_ = 30; //width for bars is const
-    int height_;
-    QColor color; //color for bar
+    double height_;
+
+    QColor color_; //color for bar
 };
 
 #endif // GAME_H
