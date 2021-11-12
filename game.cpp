@@ -1,10 +1,8 @@
-#include "game.h"
-#include "mainwindow.h"
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QtWidgets>
 #include "game.h"
-
+#include "mainwindow.h"
 
 
 game::game(int x, int y, int width, int height) //constructor
@@ -13,7 +11,7 @@ game::game(int x, int y, int width, int height) //constructor
 
     if(rand() % 100 < 50)
     {
-        color.setRgb(120,20,140);
+        color.setRgb(0,150,0);
         set_status(true);
     }
     else
@@ -28,6 +26,30 @@ game::game(int x, int y, int width, int height) //constructor
     height_ = height;
 
 }
+
+void game::kill(){
+    if(!is_alive){
+        return;
+    }
+    is_alive = false;
+    QColor newColorD(255,255,255);
+    color_ = newColorD;
+
+    emit killCell(this);
+    update();
+}
+void game::revive(){
+    if(is_alive){
+        return;
+    }
+    is_alive = true;
+    QColor newColorA(0,150,0);
+    color_ = newColorA;
+
+    emit reviveCell(this);
+    update();
+}
+
 
 QRectF game::boundingRect() const
 {
@@ -58,27 +80,75 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::RightButton)
     {
-        if(this->get_color() == QColor(120, 20, 140))
+        if(!this->get_status())
         {
             qDebug() << "Dead Cell";
-           // this->set_Color(255, 255, 255);
-            emit decrease();
+
+        }
+        else{
+            qDebug() << "You killed this cell";
+            this->set_status(false);
+            QColor newColorD(255, 255, 255);
+            color_ = newColorD;
+
+
+            emit killCell(this);
         }
     }
     else if(event->button() == Qt::LeftButton)
     {
-        if(this->get_color() == QColor(255,255,255))
+        if(!this->get_status())
         {
-             qDebug() << "Cell is now alive";
-           //  this->set_Color(120,20,140);
-             emit increase();
+            qDebug() << "Cell has been revived";
+            QColor newColorA(0,150,0);
+            color_ = newColorA;
+            this->set_status(true);
+
+
+            emit reviveCell(this);
+        }
+        else{
+            qDebug() << "Cell is alive";
         }
     }
-                update();
+    update();
+}
+
+Bar::Bar(const int x, const int y, int h) //constructor
+{
+    x_ = x;
+    y_ = y;
+    height_ = -h;
+    color = "white";
+    color.setRgb(0,150,0); //setting color for bars to green
 
 
 
 }
+
+QRectF Bar::boundingRect() const
+{
+    return QRectF(x_, y_, width_, height_); //gets rectangle
+}
+
+QPainterPath Bar::shape() const
+{
+    QPainterPath path;
+    path.addRect(x_, y_, width_, height_);
+    return path;
+}
+
+void Bar::paint(QPainter *painter, const QStyleOptionGraphicsItem * item, QWidget *widget)
+{
+        Q_UNUSED(widget);
+
+    QBrush b = painter->brush();
+    painter->setBrush(QBrush(color));
+    painter->drawRect(this->x_, this->y_, this->width_, this->height_); //making rect
+    painter->setBrush(b);
+}
+
+
 
 
 
@@ -91,8 +161,3 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //Any dead cell with exactly three live niehgbors becomes a live cell
 
     //cells initalize with 50% chance of being alive or dead
-
-
-
-
-
