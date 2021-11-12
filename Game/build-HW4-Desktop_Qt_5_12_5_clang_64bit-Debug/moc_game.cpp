@@ -190,5 +190,77 @@ void game::neighbors(int _t1, int _t2)
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
+struct qt_meta_stringdata_Bar_t {
+    QByteArrayData data[1];
+    char stringdata0[4];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_Bar_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_Bar_t qt_meta_stringdata_Bar = {
+    {
+QT_MOC_LITERAL(0, 0, 3) // "Bar"
+
+    },
+    "Bar"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_Bar[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+void Bar::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+QT_INIT_METAOBJECT const QMetaObject Bar::staticMetaObject = { {
+    &QObject::staticMetaObject,
+    qt_meta_stringdata_Bar.data,
+    qt_meta_data_Bar,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *Bar::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Bar::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_Bar.stringdata0))
+        return static_cast<void*>(this);
+    if (!strcmp(_clname, "QGraphicsItem"))
+        return static_cast< QGraphicsItem*>(this);
+    return QObject::qt_metacast(_clname);
+}
+
+int Bar::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = QObject::qt_metacall(_c, _id, _a);
+    return _id;
+}
 QT_WARNING_POP
 QT_END_MOC_NAMESPACE

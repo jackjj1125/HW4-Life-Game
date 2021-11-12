@@ -43,6 +43,8 @@ public:
     QLabel *label_2;
     QGraphicsView *gameGraphicsView;
     QGraphicsView *graphGraphicsView;
+    QPushButton *restartButton;
+    QLabel *label_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -113,6 +115,12 @@ public:
         graphGraphicsView = new QGraphicsView(centralwidget);
         graphGraphicsView->setObjectName(QString::fromUtf8("graphGraphicsView"));
         graphGraphicsView->setGeometry(QRect(100, 380, 600, 100));
+        restartButton = new QPushButton(centralwidget);
+        restartButton->setObjectName(QString::fromUtf8("restartButton"));
+        restartButton->setGeometry(QRect(650, 20, 113, 32));
+        label_3 = new QLabel(centralwidget);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(320, 40, 151, 20));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -136,6 +144,8 @@ public:
         speedLabel->setText(QApplication::translate("MainWindow", "Speed:", nullptr));
         label->setText(QApplication::translate("MainWindow", "Turn:", nullptr));
         label_2->setText(QApplication::translate("MainWindow", "Population:", nullptr));
+        restartButton->setText(QApplication::translate("MainWindow", "Restart Game", nullptr));
+        label_3->setText(QApplication::translate("MainWindow", "Conway's Game of Life", nullptr));
     } // retranslateUi
 
 };

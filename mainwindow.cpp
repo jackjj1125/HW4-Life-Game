@@ -17,17 +17,22 @@ MainWindow::MainWindow(QWidget *parent)
     // set up timer and set start flag to false
     initTimer();
     start_ = false;
+
+    // set population and turn counters to 0
     population_ = 0;
     turnCounter_ = 0;
 
+    // create grid layout and set UI scene
     MakeBoard_ = new QGraphicsScene;
     QGraphicsView * grid_view = ui->gameGraphicsView;
     grid_view->setScene(MakeBoard_);
     grid_view->setSceneRect(0,0,grid_view->frameSize().width(),grid_view->frameSize().height());
 
+    // define cell dimensions
     cell_height_ = grid_view->frameSize().height();
     cell_width_ = grid_view->frameSize().width();
 
+    // initialize cells randomly
     srand(time(0));
     for(int i = 0; i < 10; i++)
     {
@@ -46,20 +51,20 @@ MainWindow::MainWindow(QWidget *parent)
             }
         }
     }
+
+    // set turn count and population labels to initial state after grid creation
     ui->label->setText(QString("Turn: ")+QString::number(turnCounter_));
     ui->label_2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%" ));
     //ui->label_2->setText(QString("Population: ")+QString::number(population_));
 
-
-
-
+    // Connect ui buttons and sliders to slots
     connect(ui->playButton, &QAbstractButton::pressed, this, &MainWindow::on_playButton_click);
     connect(ui->pauseButton, &QAbstractButton::pressed, this, &MainWindow::on_pauseButton_click);
     connect(ui->stepButton, &QAbstractButton::pressed, this, &MainWindow::on_stepButton_click);
     connect(ui->speedSlider, &QAbstractSlider::sliderMoved, this, &MainWindow::speedSliderMoved);
     connect(ui->restartButton, &QAbstractButton::pressed, this, &MainWindow::on_restartButton_click);
 
-
+    // graph setup
     MakePopGraph_ = new QGraphicsScene; //making new graph for pop
     QGraphicsView * graph_view = ui->graphGraphicsView; //putting it on the ui
     graph_view->setScene(MakePopGraph_); //set scene for graph
@@ -72,10 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     popBar_.push_back(first_bar); //pushing it onto vector
     MakePopGraph_->addItem(first_bar); //adding it to ui
 
-    connect(ui->playButton, &QAbstractButton::pressed, this, &MainWindow::on_playButton_click);
-    connect(ui->pauseButton, &QAbstractButton::pressed, this, &MainWindow::on_pauseButton_click);
-    connect(ui->stepButton, &QAbstractButton::pressed, this, &MainWindow::on_stepButton_click);
-    connect(ui->speedSlider, &QAbstractSlider::sliderMoved, this, &MainWindow::speedSliderMoved);
+
 
 }
 
@@ -114,7 +116,17 @@ void MainWindow::turnCount() //handles number of turns
     ui->label->setText(QString("Turn#: ")+QString::number(turnCounter_)); //print number turn
 }
 
+/*
+ getNeighbors(int i, int j)
+ this function gets the neigbors of the current cell being checked and returns them in a temp vector
+ this also makes sure to catch the edge cases when checking neigbors,
+      edge cases: current cell is in one of the corners of the grid
+                  current cell lies on one of the edges
+ @params = indecies (row, col) of current cell
+*/
 std::vector<game*> MainWindow::getNeighbors(int i, int j){
+
+    // temp vector of all the neigbors of cells[i][j]
     std::vector<game*> neighbors;
 
     if(i == 0 && j == 0){  // top left corner
@@ -245,34 +257,46 @@ std::vector<game*> MainWindow::getNeighbors(int i, int j){
     return neighbors;
 }
 
+/*
+ checks the status of neighbor cells stored in temp array from getNeigbors() function
+ @param = temp vector of neighbor cells
+*/
 int MainWindow::checkNeighbors(std::vector<game*> neighbors){
-    int aliveCount = 0;
+    int aliveCount = 0; // counter to track number of alive cells
 
+    // Loop that runs 8 times, once for each neighbor cell and increments counter if a cell is alive
     for(int i = 0; i < neighbors.size(); i++){
         if(neighbors[i]->get_status()){
             aliveCount++;
         }
     }
-
-    if(aliveCount < 2){
+    // these conditionals return status to be handled by the checkAlive function
+    if(aliveCount < 2){ // less than two living neighbors (alive cell will die)
         return 1;
     }
-    if(aliveCount == 2){
+    if(aliveCount == 2){ // 2 neighbors (alive cell will remain alive, dead cell remains dead)
         return 2;
     }
-    if(aliveCount > 3){
+    if(aliveCount > 3){ // more than 3 neighbors (alive cell will die, dead stays dead)
         return 3;
     }
-    if(aliveCount == 3){
+    if(aliveCount == 3){ // 3 neighbors (dead cell will become alive, living cells stay alive)
         return 4;
     }
-
 }
 
-void MainWindow::checkAlive() //determine if cells should be dead or alive
+/*
+    - this function runs each turn and when step button is pressed
+    - gets the neighbors for each cell and checks neighbor status
+    - sets next tur status for each cell before making any changes
+    - after each cell's next turn status is determined, preform step
+        - kill or revive cells based on next turn status
+    - after cells are changed, update graph
+
+*/
+void MainWindow::checkAlive()
 {
     //qDebug() << "checking if cells are dead or alive";
-
 
     int status = 0;
 
@@ -295,18 +319,23 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
             }
         }
     }
+     // this debug statement lets us know that next status loop has finished
     qDebug() << "next status set";
+
+    // this loop actually preforms current turn after statuses are set
     for(int i = 0; i < 10; i++){
         for(int j = 0; j < 20; j++){
-            if(cells[i][j]->get_nextStatus() == 1){
+            if(cells[i][j]->get_nextStatus() == 1){ // if nextStatus is 1, current cell becomes alive
                 cells[i][j]->revive();
             }
-            else if(cells[i][j]->get_nextStatus() == 0){
+            else if(cells[i][j]->get_nextStatus() == 0){ // if next status is 0, current cell dies
                 cells[i][j]->kill();
             }
-            cells[i][j]->set_nextStatus(-1);
+            cells[i][j]->set_nextStatus(-1); // set cell status to -1 for next turn
         }
     }
+
+    //  Graph update logic
     MakePopGraph_->update(); //update our graph for population every time we update cells
     if(popBar_.size() > 20) //start moving to the left as graph keeps going
     {
@@ -330,6 +359,8 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
     }
 }
 
+// this updates population counter if user revives or kills a cell by clicking
+// called from mousePressEvent
 void MainWindow::clickCellSlot(game * cell){
     if(cell->get_status()){
         increasePopulation();
@@ -339,8 +370,8 @@ void MainWindow::clickCellSlot(game * cell){
     }
 }
 
-
-void MainWindow::on_restartButton_click() //button for restarting game
+//button for restarting game
+void MainWindow::on_restartButton_click()
 {
     qDebug() << "Restart Game Button Clicked";
     if(start_)
@@ -350,7 +381,7 @@ void MainWindow::on_restartButton_click() //button for restarting game
     }
 }
 
-//button for starting game
+// slot for play button: starts or resumes timer
 void MainWindow::on_playButton_click(){
     qDebug() << "Play button clicked!";
 
@@ -360,6 +391,7 @@ void MainWindow::on_playButton_click(){
     }
 }
 
+// slot for pause button: stops timer
 void MainWindow::on_pauseButton_click(){
     qDebug() << "Pause button clicked!";
     if(start_){
@@ -368,6 +400,9 @@ void MainWindow::on_pauseButton_click(){
     }
 }
 
+// slot for step button: advances game by one step
+// this slot is also called every step when timer is running
+//  - connected to the reviveCell and killCell signals
 void MainWindow::on_stepButton_click(){
     //qDebug() << "Step button clicked!";
     checkAlive();
