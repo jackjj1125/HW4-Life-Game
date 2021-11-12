@@ -3,12 +3,9 @@
 #include <QTimer>
 #include <QtWidgets>
 #include <vector>
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include "game.h"
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     // set up timer and set start flag to false
     initTimer();
     start_ = false;
-
+    population_ = 0;
     turnCounter_ = 0;
     QColor color(255,0,0);
 
@@ -30,8 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     cell_height_ = grid_view->frameSize().height();
     cell_width_ = grid_view->frameSize().width();
-
-
 
     srand(time(0));
     for(int i = 0; i < 10; i++)
@@ -52,19 +47,29 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
     ui->label->setText(QString("Turn: ")+QString::number(turnCounter_));
-    ui->label_2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%" ));
+    ui->label_2->setText(QString("Population: ")+QString::number(population_));
 
 
-//    MakePopGraph_ = new QGraphicsScene;
-//    QGraphicsView *graph_view = ui->MainPlot_2;
-//    graph_view->setScene(MakePopGraph_);
-//    graph_view->setSceneRect(0,0,graph_view->frameSize().width(), graph_view->frameSize().height());
+
 
     connect(ui->playButton, &QAbstractButton::pressed, this, &MainWindow::on_playButton_click);
     connect(ui->pauseButton, &QAbstractButton::pressed, this, &MainWindow::on_pauseButton_click);
     connect(ui->stepButton, &QAbstractButton::pressed, this, &MainWindow::on_stepButton_click);
     connect(ui->speedSlider, &QAbstractSlider::sliderMoved, this, &MainWindow::speedSliderMoved);
     connect(ui->restartButton, &QAbstractButton::pressed, this, &MainWindow::on_restartButton_click);
+
+
+    MakePopGraph_ = new QGraphicsScene;
+    QGraphicsView * graph_view = ui->graphGraphicsView;
+    graph_view->setScene(MakePopGraph_);
+    graph_view->setSceneRect(0,0,graph_view->frameSize().width(), graph_view->frameSize().height());
+
+    double pop_percent = (double(population_) / 200.0);
+    y_bar = graph_view->frameSize().height() -2;
+    h_bar = graph_view->frameSize().height();
+    Bar* first_bar = new Bar(0,y_bar, int(pop_percent * h_bar));
+    popBar_.push_back(first_bar);
+    MakePopGraph_->addItem(first_bar);
 
 }
 
@@ -274,6 +279,7 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
                 if(status == 1 || status == 3){
                     // kill cell
                     cells[i][j]->set_nextStatus(0);
+
                 }
                 // if status == 2, do nothing
             }
@@ -281,6 +287,7 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
                 if(status == 4){
                     // make cell alive
                     cells[i][j]->set_nextStatus(1);
+
                 }
             }
         }
@@ -297,6 +304,27 @@ void MainWindow::checkAlive() //determine if cells should be dead or alive
             cells[i][j]->set_nextStatus(-1);
         }
     }
+    MakePopGraph_->update();
+    if(popBar_.size() > 20)
+    {
+        int prev = 0;
+        for(Bar* bar : popBar_)
+        {
+            bar->set_x(-1 * bar->get_width());
+            prev = bar->get_x();
+        }
+        double pop_percent = (double(population_) / 200.0);
+        Bar* bar = new Bar(prev + 30, y_bar, int(pop_percent * h_bar));
+        popBar_.push_back(bar);
+        MakePopGraph_->addItem(bar);
+    }
+    else
+    {
+        double pop_percent = (double(population_) / 200.0);
+        Bar* bar = new Bar((turnCounter_ * 30) + 30, y_bar, int(pop_percent * h_bar));
+        popBar_.push_back(bar);
+        MakePopGraph_->addItem(bar);
+    }
 }
 
 void MainWindow::clickCellSlot(game * cell){
@@ -308,12 +336,6 @@ void MainWindow::clickCellSlot(game * cell){
     }
 }
 
-//bool MainWindow::is_alive() //checks if cells are alive
-//{
-
-//}
-
-
 
 void MainWindow::on_restartButton_click() //button for restarting game
 {
@@ -321,12 +343,8 @@ void MainWindow::on_restartButton_click() //button for restarting game
     if(start_)
     {
         initTimer();
-        start_ = false;
-        if(!start_)
-        {
-            timer->start();
-            start_ = true;
-        }
+
+        timer->start();
     }
 }
 
@@ -339,7 +357,6 @@ void MainWindow::on_playButton_click(){
         start_ = true;
     }
 }
-
 
 void MainWindow::on_pauseButton_click(){
     qDebug() << "Pause button clicked!";
