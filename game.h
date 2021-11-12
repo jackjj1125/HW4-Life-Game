@@ -69,4 +69,26 @@ private:
 
 };
 
+class Bar: public QObject, public QGraphicsItem
+{
+    Q_OBJECT;
+
+public:
+    Bar(int x, int y, int h);
+    QRectF boundingRect() const override;
+    QPainterPath shape() const override;
+
+    static int get_width() {return width_; };
+    int get_x() {return x_; };
+    void set_x(int s) {x_ = x_ + s; };
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
+
+private:
+    int x_;
+    int y_;
+    static const int width_ = 30;
+    int height_;
+    QColor color;
+};
+
 #endif // GAME_H
