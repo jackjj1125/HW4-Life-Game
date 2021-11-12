@@ -114,19 +114,21 @@ void game::mousePressEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-Bar::Bar(const int x, const int y, int h)
+Bar::Bar(const int x, const int y, int h) //constructor
 {
     x_ = x;
     y_ = y;
     height_ = -h;
     color = "white";
-    color.setRgb(0,150,0);
+    color.setRgb(0,150,0); //setting color for bars to green
+
+
 
 }
 
 QRectF Bar::boundingRect() const
 {
-    return QRectF(x_, y_, width_, height_);
+    return QRectF(x_, y_, width_, height_); //gets rectangle
 }
 
 QPainterPath Bar::shape() const
@@ -142,7 +144,7 @@ void Bar::paint(QPainter *painter, const QStyleOptionGraphicsItem * item, QWidge
 
     QBrush b = painter->brush();
     painter->setBrush(QBrush(color));
-    painter->drawRect(this->x_, this->y_, this->width_, this->height_);
+    painter->drawRect(this->x_, this->y_, this->width_, this->height_); //making rect
     painter->setBrush(b);
 }
 
