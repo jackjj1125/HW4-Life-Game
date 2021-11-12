@@ -20,8 +20,9 @@ MainWindow::MainWindow(QWidget *parent)
     initTimer();
     start_ = false;
 
+    // initialize turn counter
     turnCounter_ = 0;
-    QColor color(255,0,0);
+
 
     MakeBoard_ = new QGraphicsScene;
     QGraphicsView * grid_view = ui->gameGraphicsView;
@@ -67,8 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
     delete ui;
 }
 
