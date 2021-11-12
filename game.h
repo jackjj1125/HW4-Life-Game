@@ -41,12 +41,13 @@ public:
     QColor get_color() { return color_; }; //getter for color of cell
     void set_Color(QColor color) { color_ = color; }; //setter for color of cell(handles color logic)
 
+    // methods to kill or revive cells called every step of the game
     void kill();
     void revive();
 
 
 
-
+    // signals for preforming game logic
     signals:
         void reviveCell(game * cell);
         void killCell(game * cell);
@@ -54,9 +55,11 @@ public:
 
 
 protected:
+        // overridden mousePressEvent to handle user interaction with cells
     void mousePressEvent(QGraphicsSceneMouseEvent * event) override;
 
 private:
+    // cell fields
     int x_;
     int y_;
     int width_;
@@ -69,6 +72,8 @@ private:
 
 };
 
+
+// bar graph to track population
 class Bar: public QObject, public QGraphicsItem //bar class
 {
     Q_OBJECT;
