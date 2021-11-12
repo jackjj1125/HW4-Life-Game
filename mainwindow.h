@@ -38,16 +38,12 @@ public:
 
 private slots: //buttons
 
-//    void on_restartButton_click(); //slot for restart game button
-
-
     void on_playButton_click(); //slot for play game button
     void on_pauseButton_click(); //slot for pause game button
     void on_stepButton_click();
     void on_restartButton_click();
 
     void clickCellSlot(game * cell);
-
 
     void speedSliderMoved(int position);
 
@@ -65,6 +61,13 @@ private:
     QTimer *timer;
 
     game * cells[10][20];
+    std::vector <Bar*> popBar_;
+
+    int y_bar;
+    double h_bar;
+    int bar_height_;
+    int bar_width_;
+
 
     bool start_;
 };
