@@ -13,14 +13,22 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    createGameGrid();
+    createGameGraph();
+}
+
+MainWindow::~MainWindow(){
+    delete ui;
+}
+
+void MainWindow::createGameGrid(){
+    // set population and turn counters to 0
+    population_ = 0;
+    turnCounter_ = 0;
 
     // set up timer and set start flag to false
     initTimer();
     start_ = false;
-
-    // set population and turn counters to 0
-    population_ = 0;
-    turnCounter_ = 0;
 
     // create grid layout and set UI scene
     MakeBoard_ = new QGraphicsScene;
@@ -63,7 +71,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->stepButton, &QAbstractButton::pressed, this, &MainWindow::on_stepButton_click);
     connect(ui->speedSlider, &QAbstractSlider::sliderMoved, this, &MainWindow::speedSliderMoved);
     connect(ui->restartButton, &QAbstractButton::pressed, this, &MainWindow::on_restartButton_click);
+}
 
+void MainWindow::createGameGraph(){
     // graph setup
     MakePopGraph_ = new QGraphicsScene; //making new graph for pop
     QGraphicsView * graph_view = ui->graphGraphicsView; //putting it on the ui
@@ -76,13 +86,6 @@ MainWindow::MainWindow(QWidget *parent)
     Bar* first_bar = new Bar(0,y_bar, int(pop_percent * h_bar)); //making new bar(the first one)
     popBar_.push_back(first_bar); //pushing it onto vector
     MakePopGraph_->addItem(first_bar); //adding it to ui
-
-
-
-}
-
-MainWindow::~MainWindow(){
-    delete ui;
 }
 
 void MainWindow::initTimer(){
@@ -374,11 +377,13 @@ void MainWindow::clickCellSlot(game * cell){
 void MainWindow::on_restartButton_click()
 {
     qDebug() << "Restart Game Button Clicked";
-    if(start_)
-    {
-        initTimer();
-        timer->start();
+    if(start_){
+        timer->stop();
+        start_ = false;
     }
+    initTimer();
+    createGameGrid();
+    createGameGraph();
 }
 
 // slot for play button: starts or resumes timer
@@ -409,6 +414,10 @@ void MainWindow::on_stepButton_click(){
     turnCount();
 }
 
+// slot for speed slider: updates speed label and timer interval
+//  - timer interval = 1 second when slider is in farthest left position
+//  - timer interval = 10 milliseconds when slider is in far right position
+//  - as slider is moved to the left, timer interval is decreased, speeding up the steps
 void MainWindow::speedSliderMoved(int position){
     if(position < 2){
         ui->speedLabel->setText(QString("Speed: 1 sec"));
