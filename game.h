@@ -18,6 +18,7 @@ class game: public QObject, public QGraphicsItem
 public:
     game(int x, int y, int width, int height); //constructor
 
+
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
 
@@ -67,9 +68,6 @@ private:
     bool is_alive;
     int next_turn;
     QColor color_;
-
-
-
 };
 
 
@@ -79,21 +77,27 @@ class Bar: public QObject, public QGraphicsItem //bar class
     Q_OBJECT;
 
 public:
-    Bar(int x, int y, int h); //constructor
+    Bar(int x, int y, int h,  QColor color); //constructor
+
     QRectF boundingRect() const override;
     QPainterPath shape() const override;
 
     static int get_width() {return width_; }; //getter for width
+    double getHeight() { return height_; };
+
     int get_x() {return x_; }; //getter for x
     void set_x(int s) {x_ = x_ + s; }; //setter for x
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget) override;
+
+    void setBarColor(QColor color);
 
 private:
     int x_;
     int y_;
     static const int width_ = 30; //width for bars is const
-    int height_;
-    QColor color; //color for bar
+    double height_;
+
+    QColor color_; //color for bar
 };
 
 #endif // GAME_H

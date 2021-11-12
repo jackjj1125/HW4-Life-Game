@@ -45,6 +45,8 @@ public:
     void initTimer();
     void changeInterval(int t);
 
+    void updateGraph();
+
 
 private slots: // slots for buttons on UI
 
@@ -72,6 +74,7 @@ private:
 
     game * cells[10][20];
     std::vector <Bar*> popBar_;
+    Bar * prev_bar_;
 
     // bar graph fields
     int y_bar;
