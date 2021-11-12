@@ -20,6 +20,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void createGameGrid();
+    void createGameGraph();
+
     // methods for preforming turn/step of game
     void turnCount(); //handles turns
     void checkAlive(); //checks if cells should be alive or dead
@@ -36,8 +39,9 @@ public:
 
     void neighborSlot(int x, int y);
 
-    int population_;
+    int population_; // population counter
 
+    // timer
     void initTimer();
     void changeInterval(int t);
 
