@@ -5,13 +5,13 @@
 #include "mainwindow.h"
 
 
-game::game(int x, int y, int width, int height) //constructor
+game::game(int x, int y, int width, int height, QColor c) //constructor
 {
     QColor color(0, 0, 0);
 
     // randomly sets status and respective color upon loading up game
     if(rand() % 100 < 50){ // make cell alive
-        color.setRgb(0,150,0);
+        color = c;
         set_status(true);
     }
     else{ // make cell dead
@@ -40,13 +40,12 @@ void game::kill(){
 }
 
 // this is called if a cell is to be made alive upon step / turn of game
-void game::revive(){
+void game::revive(QColor newGameColor){
     if(is_alive){ // if cell is already alive, do nothing and return
         return;
     }
     is_alive = true;
-    QColor newColorA(0,150,0);
-    color_ = newColorA;
+    color_ = newGameColor;
 
     emit reviveCell(this); // emit signal to revive cell
     update();

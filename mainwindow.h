@@ -20,7 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void createGameGrid();
+    void createGameGrid(QColor color);
     void createGameGraph();
 
     // methods for preforming turn/step of game
@@ -84,5 +84,7 @@ private:
 
     // start flag for timer
     bool start_;
+
+    QColor newGameColor;
 };
 #endif // MAINWINDOW_H
