@@ -353,12 +353,11 @@ void MainWindow::updateGraph(){
             bar->set_x(-1 * bar->get_width()); //x is our width
             prev = bar->get_x(); //set prev to x
         }
-<<<<<<< main
         w = prev;
     }
     else{
         w = turnCounter_ * 30;
-=======
+    }
         double pop_percent = (double(population_) / 200.0); //population as a percent
         int barHeight = int(pop_percent * h_bar);
         QColor color;
@@ -372,30 +371,9 @@ void MainWindow::updateGraph(){
         popBar_.push_back(bar); //pushing bar onto vector
         MakePopGraph_->addItem(bar); //adding it to the ui
         prev_bar_ = bar;
->>>>>>> jackbranch
-    }
-    else
-    {
-    double pop_percent = (double(population_) / 200.0); //population as a percent
-    int barHeight = int(pop_percent * h_bar);
-    QColor color;
-    if(-(prev_bar_->getHeight()) < barHeight ){
-        color.setRgb(0,200,0);
-    }
-    else{
-        color.setRgb(200,0,0);
-    }
-<<<<<<< main
-    Bar* bar = new Bar(w + 30, y_bar, barHeight, color); //making new bar with num turns as x
-=======
 
-    Bar* bar = new Bar((turnCounter_ * 30) + 30, y_bar, barHeight, color); //making new bar with num turns as x
->>>>>>> jackbranch
-    popBar_.push_back(bar); //pushing bar onto vector
-    MakePopGraph_->addItem(bar); //adding it to the ui
-    prev_bar_ = bar;
     }
-}
+
 
 
 // this updates population counter if user revives or kills a cell by clicking
