@@ -16,7 +16,7 @@ class game: public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    game(int x, int y, int width, int height); //constructor
+    game(int x, int y, int width, int height, QColor c); //constructor
 
 
     QRectF boundingRect() const override;
@@ -44,7 +44,7 @@ public:
 
     // methods to kill or revive cells called every step of the game
     void kill();
-    void revive();
+    void revive(QColor newGameColor);
 
 
 
