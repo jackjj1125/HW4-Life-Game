@@ -297,7 +297,6 @@ int MainWindow::checkNeighbors(std::vector<game*> neighbors){
     - after each cell's next turn status is determined, preform step
         - kill or revive cells based on next turn status
     - after cells are changed, update graph
-
 */
 void MainWindow::checkAlive()
 {
@@ -359,20 +358,22 @@ void MainWindow::updateGraph(){
     else{
         w = turnCounter_ * 30;
     }
-    double pop_percent = (double(population_) / 200.0); //population as a percent
-    int barHeight = int(pop_percent * h_bar);
-    QColor color;
-    if(-(prev_bar_->getHeight()) < barHeight ){
-        color.setRgb(0,200,0);
+        double pop_percent = (double(population_) / 200.0); //population as a percent
+        int barHeight = int(pop_percent * h_bar);
+        QColor color;
+        if(-(prev_bar_->getHeight()) < barHeight ){
+            color.setRgb(0,200,0); //setting to green for increasing pop
+        }
+        else{
+            color.setRgb(200,0,0); //setting to red for decreasing pop
+        }
+        Bar* bar = new Bar((prev + 30), y_bar, barHeight, color); //making new bar with num turns as x
+        popBar_.push_back(bar); //pushing bar onto vector
+        MakePopGraph_->addItem(bar); //adding it to the ui
+        prev_bar_ = bar;
+
     }
-    else{
-        color.setRgb(200,0,0);
-    }
-    Bar* bar = new Bar(w + 30, y_bar, barHeight, color); //making new bar with num turns as x
-    popBar_.push_back(bar); //pushing bar onto vector
-    MakePopGraph_->addItem(bar); //adding it to the ui
-    prev_bar_ = bar;
-}
+
 
 
 // this updates population counter if user revives or kills a cell by clicking
