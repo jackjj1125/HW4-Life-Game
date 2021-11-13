@@ -13,12 +13,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    createGameGrid();
+    QColor color(0,150,0);
+    newGameColor = color;
+    createGameGrid(newGameColor);
     createGameGraph();
 
     // set turn count and population labels to initial state after grid creation
     ui->label->setText(QString("Turn: ")+QString::number(turnCounter_));
-    ui->label_2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%" ));
+    ui->label_2->setText(QString("Population: ")+QString::number(population_) + QString(" (") + QString::number((population_ * 100)/200) +QString("%)" ));
     //ui->label_2->setText(QString("Population: ")+QString::number(population_));
 
     // Connect ui buttons and sliders to slots
@@ -33,7 +35,7 @@ MainWindow::~MainWindow(){
     delete ui;
 }
 
-void MainWindow::createGameGrid(){
+void MainWindow::createGameGrid(QColor color){
     // set population and turn counters to 0
     population_ = 0;
     turnCounter_ = 0;
@@ -46,11 +48,11 @@ void MainWindow::createGameGrid(){
     MakeBoard_ = new QGraphicsScene(this);
     QGraphicsView * grid_view = ui->gameGraphicsView;
     ui->gameGraphicsView->setScene(MakeBoard_);
-    ui->gameGraphicsView->setSceneRect(0, 0, grid_view->frameSize().width(), grid_view->frameSize().height());
+    ui->gameGraphicsView->fitInView(MakeBoard_->sceneRect(), Qt::KeepAspectRatio);
 
     // define cell dimensions
-    cell_height_ = grid_view->frameSize().height();
-    cell_width_ = grid_view->frameSize().width();
+    cell_height_ = grid_view->frameSize().height() - 3;
+    cell_width_ = grid_view->frameSize().width() - 3;
 
     // initialize cells randomly
     srand(time(0));
@@ -58,13 +60,12 @@ void MainWindow::createGameGrid(){
     {
         for(int j = 0; j < 20; j++)
         {
-            game * item = new game(j,i,cell_width_/20, cell_height_/10);
+            game * item = new game(j,i,cell_width_/20, cell_height_/10, color);
             cells[i][j] = item;
             cells[i][j]->set_nextStatus(-1);
             MakeBoard_->addItem(item);
             connect(item, &game::reviveCell, this, &MainWindow::clickCellSlot);
             connect(item, &game::killCell, this, &MainWindow::clickCellSlot);
-
             if(item->get_status()){
                 increasePopulation();
             }
@@ -76,15 +77,14 @@ void MainWindow::createGameGraph(){
     // graph setup
     MakePopGraph_ = new QGraphicsScene; //making new graph for pop
     QGraphicsView * graph_view = ui->graphGraphicsView; //putting it on the ui
-
     graph_view->setScene(MakePopGraph_); //set scene for graph
-    graph_view->setSceneRect(0,0,graph_view->frameSize().width(), graph_view->frameSize().height()); //set scene for bar rectangles
+    graph_view->setAlignment(Qt::AlignLeft);
 
     double pop_percent = (double(population_) / 200.0); //population as a percent
-    y_bar = graph_view->frameSize().height() -2; //y value on bar
+    y_bar = graph_view->frameSize().height() - 2; //y value on bar
     h_bar = graph_view->frameSize().height(); //height is population as percent
     QColor color(0,200,0);
-    Bar* first_bar = new Bar(0,y_bar, int(pop_percent * h_bar), color); //making new bar(the first one)
+    Bar* first_bar = new Bar(0, y_bar, int(pop_percent * h_bar), color); //making new bar(the first one)
     popBar_.push_back(first_bar); //pushing it onto vector
     MakePopGraph_->addItem(first_bar); //adding it to ui
     prev_bar_ = first_bar;
@@ -106,19 +106,19 @@ void MainWindow::changeInterval(int t){
 
 void MainWindow::increasePopulation(){
     population_++;
-    ui->label_2->setText(QString("Population: ")+QString::number(population_)+QString(" ") +QString::number((population_ * 100)/200)+QString("%"));
+    ui->label_2->setText(QString("Population: ")+QString::number(population_)+QString(" (") +QString::number((population_ * 100)/200)+QString("%)"));
 
 }
 void MainWindow::decreasePopulation(){
     population_--;
-    ui->label_2->setText(QString("Population: ")+QString::number(population_)+QString(" ") +QString::number((population_ * 100)/200)+QString("%"));
+    ui->label_2->setText(QString("Population: ")+QString::number(population_)+QString(" (") +QString::number((population_ * 100)/200)+QString("%)"));
 
 }
 
 void MainWindow::turnCount() //handles number of turns
 {
     turnCounter_++; //increment turn counter
-    ui->label->setText(QString("Turn#: ")+QString::number(turnCounter_)); //print number turn
+    ui->label->setText(QString("Turn: ")+QString::number(turnCounter_)); //print number turn
 }
 
 /*
@@ -331,7 +331,7 @@ void MainWindow::checkAlive()
     for(int i = 0; i < 10; i++){
         for(int j = 0; j < 20; j++){
             if(cells[i][j]->get_nextStatus() == 1){ // if nextStatus is 1, current cell becomes alive
-                cells[i][j]->revive();
+                cells[i][j]->revive(newGameColor);
             }
             else if(cells[i][j]->get_nextStatus() == 0){ // if next status is 0, current cell dies
                 cells[i][j]->kill();
@@ -346,6 +346,7 @@ void MainWindow::checkAlive()
 //  Graph update logic, called every turn
 void MainWindow::updateGraph(){
     MakePopGraph_->update(); //update our graph for population every time we update cells
+    int w = 0;
     if(popBar_.size() > 20) //start moving to the left as graph keeps going
     {
         int prev = 0; //prev bar
@@ -353,6 +354,10 @@ void MainWindow::updateGraph(){
             bar->set_x(-1 * bar->get_width()); //x is our width
             prev = bar->get_x(); //set prev to x
         }
+        w = prev;
+    }
+    else{
+        w = turnCounter_ * 30;
     }
     double pop_percent = (double(population_) / 200.0); //population as a percent
     int barHeight = int(pop_percent * h_bar);
@@ -363,7 +368,7 @@ void MainWindow::updateGraph(){
     else{
         color.setRgb(200,0,0);
     }
-    Bar* bar = new Bar((turnCounter_ * 30) + 30, y_bar, barHeight, color); //making new bar with num turns as x
+    Bar* bar = new Bar(w + 30, y_bar, barHeight, color); //making new bar with num turns as x
     popBar_.push_back(bar); //pushing bar onto vector
     MakePopGraph_->addItem(bar); //adding it to the ui
     prev_bar_ = bar;
@@ -392,7 +397,12 @@ void MainWindow::on_restartButton_click(){
     timer->~QTimer();
     ui->~MainWindow();
     initTimer();
-    createGameGrid();
+    int r = rand() % 256;
+    int g = rand() % 256;
+    int b = rand() % 256;
+    QColor color(r, g, b);
+    newGameColor = color;
+    createGameGrid(color);
     createGameGraph();
 }
 
